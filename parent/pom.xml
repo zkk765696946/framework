@@ -1,0 +1,311 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.hundsun.framework</groupId>
+    <artifactId>parent</artifactId>
+    <version>1</version>
+    <packaging>pom</packaging>
+    <name>hundsun framework</name>
+    <description>提供通用的配置，帮助快速构建项目</description>
+
+    <!-- 构件执行deploy命令时，发布到的目的库 -->
+    <distributionManagement>
+        <!-- 项目正式库 <repository> <id>thinvent-internal</id> <name>nexus releases</name> 
+            <url>http://thinvent:8089/nexus/content/repositories/releases/</url> </repository> -->
+
+        <!-- 代码快照版本库（版本号以SNAPSHOTS结尾的构件） <snapshotRepository> <id>thinvent-snapshots</id> 
+            <name>nexus snapshots</name> <url>http://thinvent:8089/nexus/content/repositories/snapshots/</url> 
+            </snapshotRepository> -->
+    </distributionManagement>
+
+
+    <!-- download jar path -->
+    <repositories>
+        <repository>
+            <id>trade_release</id>
+            <name>trade_release Repository</name>
+            <url>http://repos.hundsun.com:6060/nexus/content/repositories/trade_release/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>trade_snapshot</id>
+            <name>trade_snapshot Repository</name>
+            <url>http://repos.hundsun.com:6060/nexus/content/repositories/trade_snapshot/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>hundsun_rd_hosted_release</id>
+            <name>hundsun_rd_hosted_release Repository</name>
+            <url>http://repos.hundsun.com:6060/nexus/content/repositories/hundsun_rd_hosted_release/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <!-- 项目中使用到的一些配置信息，可以在POM文件其他位置引用 -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.keyName>TF</project.keyName>
+        <jdk.version>1.6</jdk.version>
+        <property name="maven-jar"
+            value="${dist}/lib/${artifactId}-${version}.jar" />
+        <property name="maven-javadoc-jar"
+            value="${dist}/lib/${artifactId}-${version}-javadoc.jar" />
+        <property name="maven-sources-jar"
+            value="${dist}/lib/${artifactId}-${version}-sources.jar" />
+        <!-- <property name="maven-snapshots-repository-id" value="thinvent-snapshots" 
+            /> <property name="maven-snapshots-repository-url" value="http://thinvent:8089/nexus/content/repositories/snapshots/" 
+            /> <property name="maven-staging-repository-id" value="thinvent-internal" 
+            /> <property name="maven-staging-repository-url" value="http://thinvent:8089/nexus/content/repositories/releases/" 
+            /> -->
+    </properties>
+
+    <!-- 生成项目报告的相关插件 -->
+    <reporting>
+        <plugins>
+            <!-- 测试覆盖率插件 -->
+            <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> 
+                <version>3.2.5</version> </plugin> -->
+
+            <!-- find bugs -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.5.2</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <!-- 提供配置方案供选择 -->
+    <profiles>
+        <profile>
+            <id>thinvent-release</id>
+            <build>
+                <plugins>
+                    <!-- <plugin> <groupId>org.apache.maven.plugins</groupId> 
+                        <artifactId>maven-javadoc-plugin</artifactId> <version>2.7</version> <executions> 
+                        <execution> <id>attach-javadocs</id> <goals> <goal>jar</goal> </goals> </execution> 
+                        </executions> </plugin> -->
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <!-- 公共的构建插件 -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-archetype-plugin</artifactId>
+                <version>2.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                    <verbose>true</verbose>
+                    <compilerVersion>${jdk.version}</compilerVersion>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.0.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>1.5</version>
+                <configuration>
+                    <connectionType>developerConnection</connectionType>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <forkMode>once</forkMode>
+                    <argLine>${argLine} -XX:PermSize=128M
+                        -XX:MaxPermSize=2048M
+                        -XX:+HeapDumpOnOutOfMemoryError</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>pre-test</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <!-- 子模块中不继承的插件，如果使用到的情况下不必写明版本，将使用此处的默认配置 -->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.7.5.201505241946</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.2</version>
+                    <configuration>
+                        <version>2.4</version>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <mavenExecutorId>forked-path</mavenExecutorId>
+                        <useReleaseProfile>false</useReleaseProfile>
+                        <arguments>-Pthinvent-release</arguments>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration></configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.2.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat6-maven-plugin</artifactId>
+                    <version>2.0-beta-1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat7-maven-plugin</artifactId>
+                    <version>2.0-beta-1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>maven-jetty-plugin</artifactId>
+                    <version>6.1.26</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.mortbay.jetty</groupId>
+                            <artifactId>servlet-api-2.5</artifactId>
+                            <version>6.1.14</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <contextPath>/${project.name}</contextPath>
+                        <scanIntervalSeconds>10</scanIntervalSeconds>
+                        <stopKey>foo</stopKey>
+                        <stopPort>9999</stopPort>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>start-jetty</id>
+                            <phase>pre-integration-test</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                            <configuration>
+                                <scanIntervalSeconds>0</scanIntervalSeconds>
+                                <daemon>true</daemon>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>stop-jetty</id>
+                            <phase>post-integration-test</phase>
+                            <goals>
+                                <goal>stop</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.2</version>
+                    <!-- <executions> <execution> <goals> <goal>test-jar</goal> 
+                        </goals> </execution> </executions> -->
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <IsTinyProject>true</IsTinyProject>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>1.7</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
