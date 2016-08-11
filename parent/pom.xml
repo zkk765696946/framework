@@ -11,39 +11,36 @@
 
     <!-- 构件执行deploy命令时，发布到的目的库 -->
     <distributionManagement>
-        <!-- 项目正式库 <repository> <id>thinvent-internal</id> <name>nexus releases</name> 
-            <url>http://thinvent:8089/nexus/content/repositories/releases/</url> </repository> -->
+        <!-- 项目正式库 -->
+        <repository>
+            <id>zkoo-internal</id>
+            <name>nexus releases</name>
+            <url>http://localhost:8045/nexus/content/repositories/releases/</url>
+        </repository>
 
-        <!-- 代码快照版本库（版本号以SNAPSHOTS结尾的构件） <snapshotRepository> <id>thinvent-snapshots</id> 
-            <name>nexus snapshots</name> <url>http://thinvent:8089/nexus/content/repositories/snapshots/</url> 
-            </snapshotRepository> -->
+        <!-- 代码快照版本库（版本号以SNAPSHOTS结尾的构件） -->
+        <snapshotRepository>
+            <id>zkoo-snapshots</id>
+            <name>nexus snapshots</name>
+            <url>http://localhost:8045/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
     </distributionManagement>
 
 
     <!-- download jar path -->
     <repositories>
         <repository>
-            <id>trade_release</id>
-            <name>trade_release Repository</name>
-            <url>http://repos.hundsun.com:6060/nexus/content/repositories/trade_release/</url>
+            <id>zkoo-internal</id>
+            <name>zkoo-internal Repository</name>
+            <url>http://localhost:8045/nexus/content/repositories/releases/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
         </repository>
         <repository>
-            <id>trade_snapshot</id>
-            <name>trade_snapshot Repository</name>
-            <url>http://repos.hundsun.com:6060/nexus/content/repositories/trade_snapshot/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>warn</checksumPolicy>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>hundsun_rd_hosted_release</id>
-            <name>hundsun_rd_hosted_release Repository</name>
-            <url>http://repos.hundsun.com:6060/nexus/content/repositories/hundsun_rd_hosted_release/</url>
+            <id>zkoo-snapshots</id>
+            <name>nexus snapshots Repository</name>
+            <url>http://localhost:8045/nexus/content/repositories/snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>
@@ -90,13 +87,22 @@
     <!-- 提供配置方案供选择 -->
     <profiles>
         <profile>
-            <id>thinvent-release</id>
+            <id>zkoo-release</id>
             <build>
                 <plugins>
-                    <!-- <plugin> <groupId>org.apache.maven.plugins</groupId> 
-                        <artifactId>maven-javadoc-plugin</artifactId> <version>2.7</version> <executions> 
-                        <execution> <id>attach-javadocs</id> <goals> <goal>jar</goal> </goals> </execution> 
-                        </executions> </plugin> -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.7</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
